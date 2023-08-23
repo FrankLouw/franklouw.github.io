@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+const clock = new THREE.Clock();
+var delta = 0;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 10 );
 camera.position.set(1,3,0)
@@ -38,10 +40,11 @@ loader.load( './Assets/SiteUnderConstruction.glb', function ( gltf ) {
 	const action = mixer.clipAction(gltf.animations[0]);
 	action.play();
 	function animate() {
+		delta = clock.getDelta();
 		requestAnimationFrame( animate );
 		controls.update();
-		mixer.update(0.01);
-		model.rotation.y -= 0.002;
+		mixer.update(delta);
+		model.rotation.y -= 0.2*delta;
 		// cube.rotation.y += 0.01;
 	
 		renderer.render( scene, camera );
